@@ -27,26 +27,9 @@ jobs:
           node-version: 12
 
       - name: Bump version
-        uses: paulhatch/semantic-version@v3.2
-        with:
-          # The prefix to use to identify tags
-          branch: "master"
-          # The prefix to use to identify tags
-          tag_prefix: "v"
-          # A string which, if present in a git commit, indicates that a change represents a
-          # major (breaking) change
-          major_pattern: "(MAJOR)"
-          # Same as above except indicating a minor change
-          minor_pattern: "(MINOR)"
-          # A string to determine the format of the version output
-          format: "${major}.${minor}.${patch}-prerelease.${increment}"
-          # Optional path to check for changes. If any changes are detected in the path the
-          # 'changed' output will true. Enter multiple paths separated by spaces.
-          change_path: ""
-          # Named version, will be used as suffix for name version tag
-          namespace: aha
-          # Indicate whether short tags like 'v1' should be supported. If false only full
-          # tags like 'v1.0.0' will be recognized.
-          short_tags: false
-          # If this is set to true, *every* commit will be treated as a new version.
-          bump_each_commit: false
+        run: |
+          git config user.name $GITHUB_ACTOR
+          git config user.email gh-actions-${GITHUB_ACTOR}@github.com
+          npm version minor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
