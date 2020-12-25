@@ -1,5 +1,5 @@
 function test() {
-  return ""
+  return "new version is comming"
 }
 
 test();
