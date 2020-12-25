@@ -10,22 +10,44 @@ on:
 #     branches: [ master ]
 
 jobs:
-  build:
+  bump-version:
+    name: "Bump Version on master"
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [12.x]
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Bump version
-      run: git config --local user.email "action@github.com"
-      run: git config --local user.name "GitHub Action"
-      run: npm version minor
-      with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: "Checkout source code"
+        uses: "actions/checkout@v2"
+        with:
+          ref: ${{ github.ref }}
+      - name: "cat package.json"
+        run: cat ./package.json
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v1"
+        with:
+          node-version: 12
+
+      - name: Bump version
+        - uses: paulhatch/semantic-version@v3.2
+          with:
+            # The prefix to use to identify tags
+            branch: "master"
+            # The prefix to use to identify tags
+            tag_prefix: "v"
+            # A string which, if present in a git commit, indicates that a change represents a
+            # major (breaking) change
+            major_pattern: "(MAJOR)"
+            # Same as above except indicating a minor change
+            minor_pattern: ""
+            # A string to determine the format of the version output
+            format: "${major}.${minor}.${patch}-prerelease.${increment}"
+            # Optional path to check for changes. If any changes are detected in the path the
+            # 'changed' output will true. Enter multiple paths separated by spaces.
+            change_path: ""
+            # Named version, will be used as suffix for name version tag
+            namespace: aha
+            # Indicate whether short tags like 'v1' should be supported. If false only full
+            # tags like 'v1.0.0' will be recognized.
+            short_tags: false
+            # If this is set to true, *every* commit will be treated as a new version.
+            bump_each_commit: false
