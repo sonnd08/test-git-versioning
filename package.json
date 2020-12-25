@@ -1,0 +1,8 @@
+{
+  "name": "test-git-versioning",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:sonnd08/test-git-versioning.git",
+  "author": "sonnd08 <sonnd@dgroup.co>",
+  "license": "MIT"
+}
